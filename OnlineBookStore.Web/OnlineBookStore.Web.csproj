@@ -15,4 +15,8 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\OnlineBookStore.DataAccess\OnlineBookStore.DataAccess.csproj" />
+  </ItemGroup>
+
 </Project>
