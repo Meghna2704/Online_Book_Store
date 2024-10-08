@@ -1,15 +1,18 @@
 using Microsoft.EntityFrameworkCore;
+using OnlineBookStore.DataAccess.Repository;
+using OnlineBookStore.DataAccess.Repository.IRepository;
 using OnlineBookStore.Web.Data;
 
 var builder = WebApplication.CreateBuilder(args);
-
-
 
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
 
 var app = builder.Build();
 
@@ -30,6 +33,6 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{area=Customer}/{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
