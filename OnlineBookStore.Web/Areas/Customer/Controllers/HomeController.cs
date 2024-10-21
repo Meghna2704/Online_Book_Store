@@ -6,6 +6,7 @@ using System.Diagnostics;
 
 namespace OnlineBookStore.Web.Areas.Customer.Controllers
 {
+    [Area("Customer")]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -37,6 +38,11 @@ namespace OnlineBookStore.Web.Areas.Customer.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        public IActionResult Webchat()
+        {
+            return View();
         }
     }
 }

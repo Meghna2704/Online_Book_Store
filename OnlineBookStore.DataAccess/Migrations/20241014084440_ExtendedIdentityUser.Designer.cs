@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OnlineBookStore.Web.Data;
 
@@ -11,13 +12,15 @@ using OnlineBookStore.Web.Data;
 namespace OnlineBookStore.Web.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241014084440_ExtendedIdentityUser")]
+    partial class ExtendedIdentityUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.10")
+                .HasAnnotation("ProductVersion", "8.0.8")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -176,10 +179,12 @@ namespace OnlineBookStore.Web.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
                     b.Property<string>("LoginProvider")
-                        .HasColumnType("nvarchar(450)");
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
 
                     b.Property<string>("ProviderKey")
-                        .HasColumnType("nvarchar(450)");
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
 
                     b.Property<string>("ProviderDisplayName")
                         .HasColumnType("nvarchar(max)");
@@ -216,10 +221,12 @@ namespace OnlineBookStore.Web.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("LoginProvider")
-                        .HasColumnType("nvarchar(450)");
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(450)");
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
 
                     b.Property<string>("Value")
                         .HasColumnType("nvarchar(max)");
@@ -227,74 +234,6 @@ namespace OnlineBookStore.Web.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
-                });
-
-            modelBuilder.Entity("OnlineBookStore.Models.Models.Company", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("City")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PhoneNumber")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("PostalCode")
-                        .HasColumnType("int");
-
-                    b.Property<string>("State")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("StreetAddress")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Company");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            City = "Tech City",
-                            Name = "Tech Solution",
-                            PhoneNumber = "1239823849",
-                            PostalCode = 123,
-                            State = "IL",
-                            StreetAddress = "123 Tech St"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            City = "Vid City",
-                            Name = "Vivid Books",
-                            PhoneNumber = "1928302983",
-                            PostalCode = 666666,
-                            State = "IL",
-                            StreetAddress = "999 Viv St"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            City = "Lala Land",
-                            Name = "Readers Club",
-                            PhoneNumber = "1123323323",
-                            PostalCode = 999999,
-                            State = "NY",
-                            StreetAddress = "999 Main St"
-                        });
                 });
 
             modelBuilder.Entity("OnlineBookStore.Models.Models.Product", b =>
@@ -481,9 +420,6 @@ namespace OnlineBookStore.Web.Migrations
                     b.Property<string>("City")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("CompanyId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -496,8 +432,6 @@ namespace OnlineBookStore.Web.Migrations
 
                     b.Property<string>("StreetAddress")
                         .HasColumnType("nvarchar(max)");
-
-                    b.HasIndex("CompanyId");
 
                     b.HasDiscriminator().HasValue("ApplicationUser");
                 });
@@ -562,15 +496,6 @@ namespace OnlineBookStore.Web.Migrations
                         .IsRequired();
 
                     b.Navigation("Category");
-                });
-
-            modelBuilder.Entity("OnlineBookStore.Models.Models.ApplicationUser", b =>
-                {
-                    b.HasOne("OnlineBookStore.Models.Models.Company", "Company")
-                        .WithMany()
-                        .HasForeignKey("CompanyId");
-
-                    b.Navigation("Company");
                 });
 #pragma warning restore 612, 618
         }

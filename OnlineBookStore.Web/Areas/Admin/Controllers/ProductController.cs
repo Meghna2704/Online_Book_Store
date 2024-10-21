@@ -7,6 +7,7 @@ using OnlineBookStore.Web.Models;
 
 namespace OnlineBookStore.Web.Areas.Admin.Controllers
 {
+    [Area("Admin")]
     public class ProductController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;

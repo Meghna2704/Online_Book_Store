@@ -13,7 +13,8 @@ namespace OnlineBookStore.Web.Data
         }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Product> Products { get; set; }
-
+        public DbSet<ApplicationUser> ApplicationUsers { get; set; }
+        public DbSet<Company> Company { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -109,6 +110,12 @@ namespace OnlineBookStore.Web.Data
                     CategoryId = 3,
                     ImageURL = ""
                 }
+                );
+
+            modelBuilder.Entity<Company>().HasData(
+                new Company { Id = 1, Name = "Tech Solution", StreetAddress = "123 Tech St", City = "Tech City", PostalCode = 123, State = "IL", PhoneNumber = "1239823849"},
+                new Company { Id = 2, Name = "Vivid Books", StreetAddress = "999 Viv St", City = "Vid City", PostalCode = 666666, State = "IL", PhoneNumber = "1928302983"},
+                new Company { Id = 3, Name = "Readers Club", StreetAddress = "999 Main St", City = "Lala Land", PostalCode = 999999, State = "NY", PhoneNumber = "1123323323"}
                 );
         }
     }
