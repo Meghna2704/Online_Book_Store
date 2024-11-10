@@ -5,6 +5,7 @@ using OnlineBookStore.Web.Data;
 using Microsoft.AspNetCore.Identity;
 using OnlineBookStore.Utility;
 using Microsoft.AspNetCore.Identity.UI.Services;
+using OnlineBookStore.DataAccess.DBInitializer;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,9 +26,24 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.AccessDeniedPath = $"/Identity/Account/AccessDenied";
 });
 
+builder.Services.AddAuthentication().AddFacebook(option =>
+{
+    option.AppId = "3928599467397937";
+    option.AppSecret = "71315614cbf6ac50f7248f6325caeb4c";
+});
+
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(100);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
+
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IEmailSender, EmailSender>();
+builder.Services.AddScoped<IDBInitializer, DBInitializer>();
 builder.Services.AddRazorPages();
 
 var app = builder.Build();
@@ -48,6 +64,8 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
+app.UseSession();
+SeedDatabase();
 app.MapControllerRoute(
     name: "default",
     pattern: "{area=Customer}/{controller=Home}/{action=Index}/{id?}");
@@ -66,3 +84,12 @@ app.MapRazorPages();
 //});
 
 app.Run();
+
+void SeedDatabase()
+{
+    using(var scope = app.Services.CreateScope())
+    {
+        var dbInitializer = scope.ServiceProvider.GetRequiredService<IDBInitializer>();
+        dbInitializer.Initialize();
+    }
+}

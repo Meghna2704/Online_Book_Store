@@ -43,6 +43,6 @@ namespace OnlineBookStore.Models.Models
         [ValidateNever]
         public Category Category { get; set; }
         [ValidateNever]
-        public string ImageURL { get; set; }
+        public List<ProductImage> ProductImages { get; set; }
     }
 }

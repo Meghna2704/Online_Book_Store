@@ -31,10 +31,11 @@ namespace OnlineBookStore.DataAccess.Repository
                 objFromDB.Price50 = obj.Price50;
                 objFromDB.Price100  = obj.Price100;
                 objFromDB.CategoryId = obj.CategoryId;
-                if(obj.ImageURL != null)
-                {
-                    objFromDB.ImageURL = obj.ImageURL;
-                }
+                objFromDB.ProductImages = obj.ProductImages;
+                //if(obj.ImageURL != null)
+                //{
+                //    objFromDB.ImageURL = obj.ImageURL;
+                //}
             }
         }
     }

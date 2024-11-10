@@ -22,5 +22,9 @@ namespace OnlineBookStore.DataAccess.Repository
         {
             _db.OrderHeaders.Update(obj);
         }
+        public void UpdateStatus(int id, string status)
+        {
+
+        }
     }
 }

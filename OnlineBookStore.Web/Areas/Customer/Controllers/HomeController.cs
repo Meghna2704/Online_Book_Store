@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OnlineBookStore.DataAccess.Repository.IRepository;
 using OnlineBookStore.Models.Models;
+using OnlineBookStore.Models.ViewModels;
+using OnlineBookStore.Utility;
 using OnlineBookStore.Web.Models;
 using System.Diagnostics;
 using System.Security.Claims;
@@ -20,8 +22,9 @@ namespace OnlineBookStore.Web.Areas.Customer.Controllers
         }
 
         public IActionResult Index()
-        {
-            IEnumerable<Product> productList = _unitOfWork.Product.GetAll(includeProperties: "Category");
+        {            
+
+            IEnumerable<Product> productList = _unitOfWork.Product.GetAll(includeProperties: "Category,ProductImages");
             return View(productList);
         }
 
@@ -29,7 +32,7 @@ namespace OnlineBookStore.Web.Areas.Customer.Controllers
         {
             ShoppingCart cart = new()
             {
-                Product = _unitOfWork.Product.Get(x => x.Id == productId, includeProperties: "Category"),
+                Product = _unitOfWork.Product.Get(x => x.Id == productId, includeProperties: "Category,ProductImages"),
                 Count = 1,
                 ProductId = productId
             };
@@ -50,15 +53,17 @@ namespace OnlineBookStore.Web.Areas.Customer.Controllers
             {
                 cartFromDB.Count += shoppingCart.Count;
                 _unitOfWork.ShoppingCart.Update(cartFromDB);
+                _unitOfWork.Save();
             }
             else
             {
                 _unitOfWork.ShoppingCart.Add(shoppingCart);
+                _unitOfWork.Save();
+                HttpContext.Session.SetInt32(SD.SessionCart, _unitOfWork.ShoppingCart.GetAll(u => u.ApplicationUserId == userId).Count());
             }
             TempData["Success"] = "Cart updated successfully!";
 
             
-            _unitOfWork.Save();
             return RedirectToAction(nameof(Index));
         }
 
